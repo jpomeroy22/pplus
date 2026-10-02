@@ -1,0 +1,11 @@
+IDENTIFIER x None
+IDENTIFIER _x None
+IDENTIFIER my_var None
+IDENTIFIER var2 None
+IDENTIFIER fun None
+IDENTIFIER nil None
+IDENTIFIER var None
+IDENTIFIER Def None
+IDENTIFIER LET None
+EOF  None
+[exit code 0]

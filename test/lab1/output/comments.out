@@ -1,0 +1,5 @@
+IDENTIFIER x None
+EQUAL = None
+NUMBER 10 10.0
+EOF  None
+[exit code 0]

@@ -1,0 +1,14 @@
+LEFT_PAREN ( None
+RIGHT_PAREN ) None
+LEFT_BRACE { None
+RIGHT_BRACE } None
+COMMA , None
+DOT . None
+MINUS - None
+PLUS + None
+SEMICOLON ; None
+STAR * None
+SLASH / None
+PERCENT % None
+EOF  None
+[exit code 0]

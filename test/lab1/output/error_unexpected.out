@@ -1,0 +1,18 @@
+IDENTIFIER a None
+EQUAL = None
+NUMBER 1 1.0
+NUMBER 2 2.0
+SEMICOLON ; None
+IDENTIFIER b None
+EQUAL = None
+SEMICOLON ; None
+IDENTIFIER c None
+EQUAL = None
+NUMBER 3 3.0
+NUMBER 4 4.0
+SEMICOLON ; None
+EOF  None
+[line 1] Error: Unexpected character: @
+[line 2] Error: Unexpected character: $
+[line 3] Error: Unexpected character: &
+[exit code 65]

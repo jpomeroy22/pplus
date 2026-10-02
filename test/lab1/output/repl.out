@@ -1,0 +1,14 @@
+> IDENTIFIER x None
+EQUAL = None
+NUMBER 1 1.0
+SEMICOLON ; None
+EOF  None
+> EOF  None
+> EOF  None
+> PRINT print None
+STRING "does this work" does this work
+SEMICOLON ; None
+EOF  None
+> 
+[line 1] Error: Unterminated string.
+[line 1] Error: Unexpected character: @

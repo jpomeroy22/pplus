@@ -1,0 +1,8 @@
+STRING "testing" testing
+STRING "" 
+STRING "# comment test" # comment test
+STRING "test with
+multiple lines" test with
+multiple lines
+EOF  None
+[exit code 0]

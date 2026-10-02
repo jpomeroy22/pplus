@@ -1,0 +1,16 @@
+IDENTIFIER ok None
+EQUAL = None
+NUMBER 1 1.0
+SEMICOLON ; None
+IDENTIFIER bad None
+EQUAL = None
+SEMICOLON ; None
+PRINT print None
+STRING "fine" fine
+SEMICOLON ; None
+IDENTIFIER s None
+EQUAL = None
+EOF  None
+[line 2] Error: Unexpected character: @
+[line 4] Error: Unterminated string.
+[exit code 65]

@@ -1,0 +1,10 @@
+BANG ! None
+BANG_EQUAL != None
+EQUAL = None
+EQUAL_EQUAL == None
+LESS < None
+LESS_EQUAL <= None
+GREATER > None
+GREATER_EQUAL >= None
+EOF  None
+[exit code 0]
