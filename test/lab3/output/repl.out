@@ -1,0 +1,6 @@
+> (+ 1.0 (* 2.0 3.0))
+> > > > (* (- (group (+ 1.0 2.0))) 3.0)
+> 
+[line 1] Error: Expect ')' after expression.
+[line 1] Error: Unexpected character: @
+[line 1] Error: Unexpected token after expression.
