@@ -29,12 +29,10 @@ class Scanner:
         self.current = 0
         self.line = 1
 
-    def scan_tokens(self):
-        """Return a list of Token objects, ending with one EOF token.
 
-        Report lexical errors through ErrorHandler.error(line, message).
-        Scanning begins at line 1. Ignore whitespace and # comments.
-        """
+    # Scan keeps looping until it reaches the end
+    def scan_tokens(self):
+        # Scans in the input as a list, adds EOF at the end
         while not self.at_end():
             self.start = self.current
             self.scan_token()
@@ -42,7 +40,10 @@ class Scanner:
         return self.tokens
 
     def scan_token(self):
+        # Grabs the next character and moves forward
         c = self.advance()
+
+        # Big if statement to handle different token types
 
         # Single character tokens
         if c == '(':
@@ -118,6 +119,7 @@ class Scanner:
         self.add_token(TokenType.STRING, value)
 
     def number(self):
+        # Grabs the number before the decimal
         while self.is_digit(self.peek()):
             self.advance()
 
@@ -127,6 +129,7 @@ class Scanner:
             while self.is_digit(self.peek()):
                 self.advance()
 
+        # Saves the number as a float 
         self.add_token(TokenType.NUMBER, float(self.source[self.start:self.current]))
 
     def identifier(self):
@@ -161,6 +164,7 @@ class Scanner:
         self.current += 1
         return True
 
+    # Takes characters from start to current, save them as a token in the list
     def add_token(self, type, literal=None):
         text = self.source[self.start:self.current]
         self.tokens.append(Token(type, text, literal, self.line))
