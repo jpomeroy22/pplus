@@ -3,6 +3,7 @@ from error_handler import ErrorHandler
 from scanner import Scanner
 from parser import Parser
 from ast_printer import AstPrinter
+from interpreter import Interpreter
 
 class PPlus:
     def run(self, source):
@@ -14,6 +15,9 @@ class PPlus:
         if tree is None:
             return None
         print(AstPrinter().print(tree))
+        result = Interpreter().interpret(tree)
+        if result is not None:
+            print(result)
 
     def run_file(self, filename):
         try:
