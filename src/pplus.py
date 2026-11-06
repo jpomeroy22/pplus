@@ -2,7 +2,6 @@ import sys
 from error_handler import ErrorHandler
 from scanner import Scanner
 from parser import Parser
-from ast_printer import AstPrinter
 from interpreter import Interpreter
 
 class PPlus:
@@ -11,13 +10,10 @@ class PPlus:
         tokens = Scanner(source).scan_tokens()
         if ErrorHandler.had_error:
             return
-        tree = Parser(tokens).parse()
-        if tree is None:
-            return None
-        print(AstPrinter().print(tree))
-        result = Interpreter().interpret(tree)
-        if result is not None:
-            print(result)
+        statements = Parser(tokens).parse()
+        if ErrorHandler.had_error:
+            return
+        Interpreter().interpret(statements)
 
     def run_file(self, filename):
         try:

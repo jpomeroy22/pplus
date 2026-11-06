@@ -1,6 +1,7 @@
 from token_type import TokenType
 from expression import *
 from error_handler import ErrorHandler
+from statement import ExpressionStatement, PrintStatement
 
 class ParseError(Exception):
     pass
@@ -106,10 +107,35 @@ class Parser:
         return ParseError()
 
     def parse(self):
-        try:
-            expression = self.expression()
-            if not self.at_end():
-                raise self.error(self.peek(), "Unexpected token after expression.")
-            return expression
-        except ParseError:
-            return None
+        statements = []
+        while not self.at_end():
+            try:
+                statements.append(self.statement())
+            except ParseError:
+                self.skip_to_next_statement()
+        return statements
+
+    def statement(self):
+        if self.match(TokenType.PRINT):
+            return self.print_statement()
+        return self.expression_statement()
+
+    def print_statement(self):
+        value = self.expression()
+        self.consume(TokenType.SEMICOLON, "Expect ';' after value.")
+        return PrintStatement(value)
+
+    def expression_statement(self):
+        expression = self.expression()
+        self.consume(TokenType.SEMICOLON, "Expect ';' after expression.")
+        return ExpressionStatement(expression)
+
+    def skip_to_next_statement(self):
+        self.step()
+        while not self.at_end():
+            if self.previous().type == TokenType.SEMICOLON:
+                return
+            if self.peek().type in (TokenType.CLASS, TokenType.DEF, TokenType.LET, TokenType.FOR,
+                                    TokenType.IF, TokenType.WHILE, TokenType.PRINT, TokenType.RETURN):
+                return
+            self.step()

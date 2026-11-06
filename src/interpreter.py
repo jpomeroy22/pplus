@@ -1,6 +1,7 @@
 from expression import Visitor
 from token_type import TokenType
 from error_handler import ErrorHandler
+from statement import StatementVisitor
 
 class InterpretError(Exception):
     def __init__(self, token, message):
@@ -8,14 +9,26 @@ class InterpretError(Exception):
         self.token = token
         self.message = message
 
-class Interpreter(Visitor):
-    def interpret(self, expression):
+class Interpreter(Visitor, StatementVisitor):
+    def interpret(self, statements):
         try:
-            value = self.evaluate(expression)
-            return self.make_text(value)
+            for statement in statements:
+                self.execute(statement)
         except InterpretError as error:
             ErrorHandler.error(error.token.line, error.message)
-            return None
+
+    def execute(self, statement):
+        statement.accept(self)
+
+    def visit_expression_statement(self, statement):
+        self.evaluate(statement.expression)
+
+    def visit_print_statement(self, statement):
+        value = self.evaluate(statement.expression)
+        if isinstance(value, str):
+            print(value)
+        else:
+            print(self.make_text(value))
 
     def evaluate(self, expression):
         return expression.accept(self)
