@@ -1,7 +1,7 @@
 from token_type import TokenType
 from expression import *
 from error_handler import ErrorHandler
-from statement import ExpressionStatement, PrintStatement
+from statement import ExpressionStatement, PrintStatement, LetStatement, BlockStatement
 
 class ParseError(Exception):
     pass
@@ -47,6 +47,9 @@ class Parser:
 
         if self.match(TokenType.NUMBER, TokenType.STRING):
             return Literal(self.previous().literal)
+
+        if self.match(TokenType.IDENTIFIER):
+            return Variable(self.previous())
 
         if self.match(TokenType.LEFT_PAREN):
             expr = self.expression()
@@ -95,7 +98,21 @@ class Parser:
         return expression
 
     def expression(self):
-        return self.equality()
+        return self.assignment()
+
+    def assignment(self):
+        expression = self.equality()
+
+        if self.match(TokenType.EQUAL):
+            equals = self.previous()
+            value = self.assignment()
+
+            if isinstance(expression, Variable):
+                name = expression.name
+                return Assign(name, value)
+
+            self.error(equals, "Invalid assignment target.")
+        return expression
 
     def consume(self, type, message):
         if self.check(type):
@@ -110,15 +127,37 @@ class Parser:
         statements = []
         while not self.at_end():
             try:
-                statements.append(self.statement())
+                statements.append(self.declaration())
             except ParseError:
                 self.skip_to_next_statement()
         return statements
 
+    def declaration(self):
+        if self.match(TokenType.LET):
+            return self.let_declaration()
+        return self.statement()
+
+    def let_declaration(self):
+        name = self.consume(TokenType.IDENTIFIER, "Expect variable name.")
+        initializer = None
+        if self.match(TokenType.EQUAL):
+            initializer = self.expression()
+        self.consume(TokenType.SEMICOLON, "Expect ';' after variable declaration.")
+        return LetStatement(name, initializer)
+
     def statement(self):
         if self.match(TokenType.PRINT):
             return self.print_statement()
+        if self.match(TokenType.LEFT_BRACE):
+            return BlockStatement(self.block())
         return self.expression_statement()
+
+    def block(self):
+        statements = []
+        while not self.check(TokenType.RIGHT_BRACE) and not self.at_end():
+            statements.append(self.declaration())
+        self.consume(TokenType.RIGHT_BRACE, "Expect '}' after block.")
+        return statements
 
     def print_statement(self):
         value = self.expression()

@@ -25,6 +25,12 @@ class AstPrinter(Visitor):
     def visit_binary(self, expression):
         return self.parenthesize(expression.operator.lexeme, expression.left, expression.right)
 
+    def visit_variable(self, expression):
+        return expression.name.lexeme
+
+    def visit_assign(self, expression):
+        return self.parenthesize("= " + expression.name.lexeme, expression.value)
+
     def parenthesize(self, name, *expressions):
         pieces = []
         pieces.append(name)

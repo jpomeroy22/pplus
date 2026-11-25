@@ -1,0 +1,15 @@
+let a = 1;
+print a;
+a = 2;
+print a;
+let b;
+print b;
+let a = "test";
+print a;
+print a = 1;
+let a = 1;
+let b = 2;
+print a + b;
+a = b = 5;
+print a;
+print b;

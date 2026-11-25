@@ -5,6 +5,9 @@ from parser import Parser
 from interpreter import Interpreter
 
 class PPlus:
+    def __init__(self):
+        self.interpreter = Interpreter()
+
     def run(self, source):
         ErrorHandler.had_error = False
         tokens = Scanner(source).scan_tokens()
@@ -13,7 +16,7 @@ class PPlus:
         statements = Parser(tokens).parse()
         if ErrorHandler.had_error:
             return
-        Interpreter().interpret(statements)
+        self.interpreter.interpret(statements)
 
     def run_file(self, filename):
         try:

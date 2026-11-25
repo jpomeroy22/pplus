@@ -2,6 +2,7 @@ from expression import Visitor
 from token_type import TokenType
 from error_handler import ErrorHandler
 from statement import StatementVisitor
+from environment import Environment, UndefinedVariableError
 
 class InterpretError(Exception):
     def __init__(self, token, message):
@@ -10,15 +11,45 @@ class InterpretError(Exception):
         self.message = message
 
 class Interpreter(Visitor, StatementVisitor):
+    def __init__(self):
+        self.environment = Environment()
+        
     def interpret(self, statements):
         try:
             for statement in statements:
                 self.execute(statement)
-        except InterpretError as error:
+        except (InterpretError, UndefinedVariableError) as error:
             ErrorHandler.error(error.token.line, error.message)
 
     def execute(self, statement):
         statement.accept(self)
+
+    def execute_block(self, statements, environment):
+        previous_environment = self.environment
+        try:
+            self.environment = environment
+            for statement in statements:
+                self.execute(statement)
+        finally:
+            self.environment = previous_environment
+
+    def visit_let_statement(self, statement):
+        value = None
+        if statement.initializer is not None:
+            value = self.evaluate(statement.initializer)
+        self.environment.define(statement.name.lexeme, value)
+
+    def visit_block_statement(self, statement):
+        new_environment = Environment(self.environment)
+        self.execute_block(statement.statements, new_environment)
+
+    def visit_variable(self, expression):
+        return self.environment.get(expression.name)
+
+    def visit_assign(self, expression):
+        value = self.evaluate(expression.value)
+        self.environment.assign(expression.name, value)
+        return value
 
     def visit_expression_statement(self, statement):
         self.evaluate(statement.expression)

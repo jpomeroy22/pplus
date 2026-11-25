@@ -13,6 +13,12 @@ class Visitor:
     def visit_binary(self, expression):
         raise NotImplementedError
 
+    def visit_variable(self, expression):
+        raise NotImplementedError
+
+    def visit_assign(self, expression):
+        raise NotImplementedError
+
 
 class Expression:
     def accept(self, visitor):
@@ -52,3 +58,20 @@ class Binary(Expression):
 
     def accept(self, visitor):
         return visitor.visit_binary(self)
+
+
+class Variable(Expression):
+    def __init__(self, name):
+        self.name = name
+
+    def accept(self, visitor):
+        return visitor.visit_variable(self)
+
+
+class Assign(Expression):
+    def __init__(self, name, value):
+        self.name = name
+        self.value = value
+
+    def accept(self, visitor):
+        return visitor.visit_assign(self)
